@@ -28,15 +28,14 @@
 		<script type="text/javascript" src="http://sole.github.com/tween.js/src/Tween.js"></script>
 		<script type="text/javascript" src="https://raw.github.com/zz85/sparks.js/master/Sparks.js"></script>
 		-->
-		<script type="text/javascript" src="Sparks/examples/js/Three.js"></script>
+		<script type="text/javascript" src="js/Three.js"></script>
 
-		<script type="text/javascript" src="Sparks/examples/js/RequestAnimationFrame.js"></script>
-		<script type="text/javascript" src="Sparks/examples/js/Stats.js"></script>
-		
-		<script type="text/javascript" src="Sparks/examples/js/Tween.js"></script>
-		<script type="text/javascript" src="Sparks/Sparks.js"></script>
-		<script type="text/javascript" src="Sparks/examples/CanvasShaders.js"></script>
-        <script type="text/javascript" src="Sparks.extras.js"></script>
+		<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+		<script type="text/javascript" src="js/Stats.js"></script>
+		<script type="text/javascript" src="js/Tween.js"></script>
+		<script type="text/javascript" src="../Sparks.js"></script>
+		<script type="text/javascript" src="CanvasShaders.js"></script>
+        <script type="text/javascript" src="../Sparks.extras.js"></script>
 		
 		<script type="text/javascript">
 
@@ -48,7 +47,7 @@
 			var windowHalfY = window.innerHeight / 2;
 
 			var lasttime = Date.now(), elapsed;
-			var sprite = THREE.ImageUtils.loadTexture( "textures/Light2.png" );
+
 			init();
 			animate();
 			
@@ -66,14 +65,7 @@
 
 				group = new THREE.Object3D();
 				scene.add( group );
-				/*
-				renderer = new THREE.WebGLRenderer( { clearAlpha: 1 } );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
-*/
 
-
-				//renderer = new THREE.WebGLRenderer();
 				renderer = new THREE.CanvasRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				//renderer.setClearColorHex( 0x000000, 1 );
@@ -99,9 +91,6 @@
 				var onParticleCreated = function(p) {
 					// create a three.js particle
 
-					
-					//var material = new THREE.ParticleBasicMaterial( { size: 85, map: sprite, vertexColors: true } );
-					//size:1,sizeAttenuation: true, , depthTest: false , transparent: true , vertexColors: false ,blending: THREE.MultiplyBlending
 					var material = new THREE.ParticleCanvasMaterial( { map: sprite  , program: SPARKS.CanvasShadersUtils.circles, blending:THREE.AdditiveBlending } );
 					material.color.setRGB(0, 1, 0); 
 					
