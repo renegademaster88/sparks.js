@@ -91,7 +91,7 @@
 				var onParticleCreated = function(p) {
 					// create a three.js particle
 
-					var material = new THREE.ParticleCanvasMaterial( { map: sprite  , program: SPARKS.CanvasShadersUtils.circles, blending:THREE.AdditiveBlending } );
+					var material = new THREE.ParticleCanvasMaterial( { program: SPARKS.CanvasShadersUtils.circles, blending:THREE.AdditiveBlending } );
 					material.color.setRGB(0, 1, 0); 
 					
 					particle = new THREE.Particle( material );

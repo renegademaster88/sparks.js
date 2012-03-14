@@ -129,10 +129,18 @@
 					{						
 						_ratio -= this.start_life;
 						_ratio =  (_ratio / (1 - this.start_life));
-						particle.target.scale.x= particle.target.scale.y = this.start_scale + _ratio *(this.end_scale-this.start_scale);
+						/*
+						if ( particle.target == instanceof THREE.Particle )
+						{
+							particle.target.scale.x= particle.target.scale.y = this.start_scale + _ratio *(this.end_scale-this.start_scale);
+						}
+						else */
+							particle.target.scale( this.start_scale + _ratio *(this.end_scale-this.start_scale))
+							
 					}
 					else 	
-					particle.target.scale.x= particle.target.scale.y = this.start_scale;
+						//particle.target.scale.x= particle.target.scale.y = this.start_scale;
+						particle.target.scale( this.start_scale + _ratio *(this.end_scale-this.start_scale))
 				}
 				
 			}
@@ -191,7 +199,8 @@
 					_count += time;
 					var t =  _count*this.time_scale;
 					var sinv = (Math.sin(t) + this.constant)* this.sin_scale;
-					particle.target.scale.x= particle.target.scale.y = sinv;
+					//particle.target.scale.x= particle.target.scale.y = sinv;
+					particle.target.size(sinv);
 				}
 				
 			}
@@ -258,6 +267,87 @@
 				}
 					
 			}
+
+			/*
+			Generates a hyper cube, where the empty space in the middle of the cube is defined my the minimum dimensions
+			position 
+			max_w = maximum width (x) 
+			max_h = maximum height (y)
+			max_d = maximum depth (z)
+			min_w = minimum width 
+			min_h = minimum height
+			min_d = minimum depth
+		
+			Doesnt quite behave as Expected
+			SPARKSx.HyperCubeZone = function(position, max_w,max_h,max_d,min_w,min_h,min_d) {
+				this.position = position;
+				this.max_w = max_w;
+				this.max_h = max_h;
+				this.max_d = max_d;
+				if (min_w >= max_w)
+				{
+					console.error('SPARKSx.HyperCubeZone max width must be greater than min width')
+					min_w = max_w -1;
+				}
+				this.min_w = min_w !== undefined ? min_w : 0;
+				if (min_h >= max_h)
+				{
+					console.error('SPARKSx.HyperCubeZone max height must be greater than min height')
+					min_h = max_h -1;
+				}
+				this.min_h = min_h !== undefined ? min_h : 0; 
+				if (min_d >= max_d)
+				{
+					console.error('SPARKSx.HyperCubeZone max depth must be greater than min depth')
+					min_d = max_d -1;
+				}
+				this.min_d = min_d !== undefined ? min_d : 0;
+			};
+			
+			
+			SPARKSx.HyperCubeZone.prototype.getLocation = function() {
+				//TODO use pool?
+			
+				var location = this.position.clone();
+				var _x,_y,_z
+				_x  = (Math.random()-0.5) * (this.max_w - this.min_w);
+				if (_x < 0) location.x += _x - this.min_w/2;
+				else location.x += _x + this.min_w/2;
+				
+				_y  = (Math.random()-0.5) * (this.max_h - this.min_h);
+				if (_y < 0) location.y += _y - this.min_h/2;
+				else location.y += (_y + this.min_h/2);
+				
+				_z  = (Math.random()-0.5) * (this.max_d - this.min_d);
+				if (_z < 0) location.z += _z - this.min_d/2;
+				else location.z += (_z + this.min_d/2);
+				
+				return location;
+				
+			};
+			
+				*/
+			
+			SPARKSx.CubeZone = function(position, x, y, z) {
+				this.position = position;
+				this.x = x;
+				this.y = y;
+				this.z = z;
+			};
+
+			SPARKSx.CubeZone.prototype.getLocation = function() {
+				//TODO use pool?
+			
+				var location = this.position.clone();
+				location.x += (Math.random()-0.5) * this.x;
+				location.y += (Math.random()-0.5) * this.y;
+				location.z += (Math.random()-0.5) * this.z;
+				
+				return location;
+				
+			};
+
+
 			/*
 			Generates a point in the middle of a sphere 
 			position -of the sphere
@@ -265,13 +355,15 @@
 			surface - if true generates a point on the surface of the sphere
 			*/
 			
+			
 			SPARKSx.SphereZone = function(position, radius,surface) {
 				
 				if (surface === undefined)
 					this.surface = true;
 				else this.surface = surface;
 				
-				this.position = position;
+				//this.position = new THREE.Vector3();
+				this.position = position;//.clone();
 				this.radius = radius;
 				var _r;
 				var _cos_theta;
@@ -281,7 +373,7 @@
 				this.getLocation = function()
 				{
 					var location = new THREE.Vector3();
-					location.clone(this.position);
+					location =this.position.clone();
 					
 					/* FROM Random_on_sphere.pdf;
 					const float phi = 2 * PI * random();
